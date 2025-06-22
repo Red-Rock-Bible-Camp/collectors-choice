@@ -1,0 +1,145 @@
+:root {
+    font-size: 20px;
+    font-family: sans-serif;
+}
+@media screen and (max-width: 768px) {
+    :root {
+        font-size: 14px;
+    }
+}
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+html {
+    display: flex;
+    min-height: 100%;
+}
+body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.stock {
+    color: #222;
+    height: 100%;
+    width: 100%;
+    margin: auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+.high {
+}
+.stocks {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    flex-grow: 1;
+}
+.stock .number {
+    font-family: Lobster;
+}
+.stock.red .logo {
+    background-color: red;
+}
+.stock.blue .logo {
+    background-color: blue;
+}
+.stock.green .logo {
+    background-color: green;
+}
+.stock.purple .logo {
+    background-color: rgb(90, 0, 128);
+}
+.stock.magenta .logo {
+    background-color: rgb(177, 0, 177);
+}
+.stock.teal .logo {
+    background-color: rgb(0, 180, 180);
+}
+.stock.orange .logo {
+    background-color: orange;
+}
+.stock.pink .logo {
+    background-color: rgb(255, 128, 200);
+}
+.stock.black .logo {
+    background-color: black;
+}
+.stock.lime .logo {
+    background-color: lime;
+}
+.stock.red {
+    background-color: rgba(255, 0, 0, 0.15);
+}
+.stock.blue {
+    background-color: rgba(0, 0, 255, 0.15);
+}
+.stock.green {
+    background-color: rgba(0, 128, 0, 0.15);
+}
+.stock.purple {
+    background-color: rgba(90, 0, 128, 0.15);
+}
+.stock.magenta {
+    background-color: rgba(177, 0, 177, 0.15);
+}
+.stock.teal {
+    background-color: rgba(0, 180, 180, 0.15);
+}
+.stock.orange {
+    background-color: rgba(255, 153, 0, 0.15);
+}
+.stock.pink {
+    background-color: rgba(255, 128, 200, 0.15);
+}
+.stock.black {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+.stock.lime {
+    background-color: rgba(0, 255, 0, 0.15);
+}
+.stock .logo {
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    display: flex;
+    margin: 15px auto;
+}
+.stock .logo img {
+    width: 5rem;
+    height: 5rem;
+    margin: auto;
+}
+
+.stock .name {
+    font-size: 1.25rem;
+}
+
+.stock .number {
+    font-size: 2rem;
+}
+
+#next {
+    padding: 1rem;
+}
+#next,
+#seed {
+    width: 150px;
+    text-align: center;
+}
+
+footer * {
+    font-size: 1.5rem;
+    padding: 20px;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
