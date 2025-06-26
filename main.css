@@ -33,15 +33,14 @@ body {
     justify-content: center;
     text-align: center;
 }
-.high {
-}
 .stocks {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     flex-grow: 1;
 }
 .stock .number {
-    font-family: Lobster;
+    font-family: sans-serif;
+    font-weight: bold;
 }
 .stock.red .logo {
     background-color: red;
@@ -139,7 +138,19 @@ footer * {
 }
 
 footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+}
+footer > div {
+    padding: 0;
+}
+footer > div:nth-child(1) {
+    text-align: left;
+}
+footer > div:nth-child(2) {
+    text-align: center;
+}
+footer > div:nth-child(3) {
+    text-align: right;
 }
