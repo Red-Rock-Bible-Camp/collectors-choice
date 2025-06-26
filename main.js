@@ -1,30 +1,8 @@
 const colors = ["red", "blue", "green", "teal", "magenta", "purple", "orange", "pink", "black", "lime"];
-let iterations = 1;
+const history = [];
+let currentIndex = 0;
+let highestIndexGenerated = 0;
 let highCount = 0;
-let colorCounts = {
-    red: 0,
-    blue: 0,
-    green: 0,
-    purple: 0,
-    magenta: 0,
-    teal: 0,
-    orange: 0,
-    pink: 0,
-    black: 0,
-    lime: 0,
-};
-let colorValueLast = {
-    red: 0,
-    blue: 0,
-    green: 0,
-    purple: 0,
-    magenta: 0,
-    teal: 0,
-    orange: 0,
-    pink: 0,
-    black: 0,
-    lime: 0,
-};
 function boxMullerRandom(variance = 1.0) {
     let u = 0,
         v = 0;
@@ -37,8 +15,32 @@ function boxMullerRandom(variance = 1.0) {
 }
 
 iteration = 0;
-function displayStocks() {
+history.push({
+    red: 0,
+    blue: 0,
+    green: 0,
+    purple: 0,
+    magenta: 0,
+    teal: 0,
+    orange: 0,
+    pink: 0,
+    black: 0,
+    lime: 0,
+});
+function generateStocks() {
     let variance = 4.0;
+    let colorCurrentValue = {
+        red: 0,
+        blue: 0,
+        green: 0,
+        purple: 0,
+        magenta: 0,
+        teal: 0,
+        orange: 0,
+        pink: 0,
+        black: 0,
+        lime: 0,
+    };
     if (iteration < 3) variance = 3.0;
     else if (iteration < 5) variance = 1.5;
     else if (iteration < 8) variance = 6.0;
@@ -49,43 +51,59 @@ function displayStocks() {
     else if (iteration < 8) scale = 250;
     else if (iteration < 11) scale = 300;
 
+    for (color of colors) {
+        colorCurrentValue[color] = Math.round((boxMullerRandom(variance) * scale) / 10) * 10;
+    }
+    history.push({ ...colorCurrentValue });
+    iteration++;
+    history[iteration] = { ...colorCurrentValue };
+    highestIndexGenerated = iteration;
+    return colorCurrentValue;
+}
+function displayStocks(stockTicker = null) {
+    // get the current stock values
+    let colorCurrentValue = stockTicker || history[iteration];
+    // get the last stock values
+    let colorValueLast = history[iteration - 1] || {
+        red: 0,
+        blue: 0,
+        green: 0,
+        purple: 0,
+        magenta: 0,
+        teal: 0,
+        orange: 0,
+        pink: 0,
+        black: 0,
+        lime: 0,
+    };
+
     let text = "";
     for (color of colors) {
-        // Generate a normally distributed random number between 0 and 1, scale it to 0-300, and round to nearest 5
-        colorValue = Math.round((boxMullerRandom(variance) * scale) / 10) * 10;
         let indicator = "stagnant";
-        if (colorValue >= colorValueLast[color] + 15) {
+        if (colorCurrentValue[color] >= colorValueLast[color] + 15) {
             indicator = "up";
-            if (colorValue >= colorValueLast[color] + 50) {
+            if (colorCurrentValue[color] >= colorValueLast[color] + 50) {
                 indicator = "up_double";
             }
-            if (colorValue >= colorValueLast[color] + 100) {
+            if (colorCurrentValue[color] >= colorValueLast[color] + 100) {
                 indicator = "up_triple";
             }
-        } else if (colorValue <= colorValueLast[color] - 15) {
+        } else if (colorCurrentValue[color] <= colorValueLast[color] - 15) {
             indicator = "down";
-            if (colorValue <= colorValueLast[color] - 50) {
+            if (colorCurrentValue[color] <= colorValueLast[color] - 50) {
                 indicator = "down_double";
             }
-            if (colorValue <= colorValueLast[color] - 100) {
+            if (colorCurrentValue[color] <= colorValueLast[color] - 100) {
                 indicator = "down_triple";
             }
         }
-        if (iteration == 0) indicator = "stagnant";
-        colorValueLast[color] = colorValue;
-        if (colorValue >= 200) {
-            highCount++;
-            colorCounts[color]++;
-        }
-        text += `<div class="stock${
-            colorValue >= 200 ? " high" : ""
-        } ${color}"><div class="logo"><img class="indicator" src="images/${indicator}.png"/></div><div class="number"><span>$ ${colorValue} M</span></div><div class="name">${
-            color[0].toUpperCase() + color.slice(1)
-        }</div></div>`;
+        if (iteration == 1 || currentIndex == 0) indicator = "stagnant";
+        text += `<div class="stock ${color}"><div class="logo"><img class="indicator" src="images/${indicator}.png"/></div><div class="number"><span>$ ${
+            colorCurrentValue[color]
+        } M</span></div><div class="name">${color[0].toUpperCase() + color.slice(1)}</div></div>`;
     }
     document.querySelector("main").innerHTML = text;
-    iteration++;
-    document.querySelector("#index").innerText = iteration;
+    document.querySelector("#index").innerText = currentIndex;
 }
 
 let seed = Math.floor(Math.random() * 8999) + 1000;
@@ -98,7 +116,20 @@ document.querySelector("#seed").addEventListener("input", (e) => {
     rng = new Math.seedrandom(seed);
 });
 
-document.querySelector("button").addEventListener("click", () => {
-    displayStocks();
-    console.log("Next");
+document.querySelector("#next").addEventListener("click", () => {
+    // generate only if we are at the end of the history
+    if (currentIndex >= highestIndexGenerated) {
+        console.log("Next, Generated new stocks");
+        stockTicker = generateStocks();
+    } else {
+        stockTicker = history[currentIndex + 1] || null;
+        console.log("Next, No new stocks generated. Using history.");
+    }
+    currentIndex = Math.min(highestIndexGenerated, currentIndex + 1);
+    displayStocks(stockTicker);
+});
+document.querySelector("#prev").addEventListener("click", () => {
+    currentIndex = Math.max(0, currentIndex - 1);
+    displayStocks(history[currentIndex] || null);
+    console.log("Prev");
 });

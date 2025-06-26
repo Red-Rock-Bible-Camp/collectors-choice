@@ -123,10 +123,11 @@ body {
     font-size: 2rem;
 }
 
-#next {
+.button {
     padding: 1rem;
+    cursor: pointer;
 }
-#next,
+.button,
 #seed {
     width: 150px;
     text-align: center;
