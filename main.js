@@ -61,9 +61,7 @@ function generateStocks() {
     return colorCurrentValue;
 }
 function displayStocks(stockTicker = null) {
-    // get the current stock values
-    let colorCurrentValue = stockTicker || history[iteration];
-    // get the last stock values
+    let colorCurrentValue = stockTicker || history[0];
     let colorValueLast = history[iteration - 1] || {
         red: 0,
         blue: 0,
@@ -129,7 +127,12 @@ document.querySelector("#next").addEventListener("click", () => {
     displayStocks(stockTicker);
 });
 document.querySelector("#prev").addEventListener("click", () => {
+    oldIndex = currentIndex;
     currentIndex = Math.max(0, currentIndex - 1);
+    if (oldIndex == currentIndex) {
+        console.log("Prev, No change in index.");
+        return;
+    }
     displayStocks(history[currentIndex] || null);
-    console.log("Prev");
+    console.log("Prev, Changed index to " + currentIndex + " from " + oldIndex);
 });
